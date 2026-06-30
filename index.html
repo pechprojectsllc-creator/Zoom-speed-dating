@@ -3,120 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoom Speed Dating</title>
+    <title>Zoom Speed Dating - Live Demo</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            min-height: 100vh;
-            text-align: center;
-        }
-        .container {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 2.8em;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        .tagline {
-            font-size: 1.2em;
-            opacity: 0.9;
-            margin-bottom: 40px;
-        }
-        .card {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 25px;
-            margin: 20px 0;
-        }
-        input {
-            width: 85%;
-            padding: 14px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-        button {
-            background: white;
-            color: #2575fc;
-            border: none;
-            padding: 14px 32px;
-            margin: 12px 8px;
-            font-size: 1.05em;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        button:hover {
-            transform: translateY(-2px);
-        }
-        .status {
-            margin-top: 20px;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin:0; background: linear-gradient(135deg, #6a11cb, #2575fc); color:white; text-align:center; min-height:100vh; }
+        .container { max-width: 520px; margin: 20px auto; padding: 20px; }
+        h1 { font-size: 2.4em; }
+        .card { background: rgba(255,255,255,0.15); border-radius: 16px; padding: 20px; margin: 15px 0; }
+        button { background:white; color:#2575fc; border:none; padding:14px 28px; margin:10px; border-radius:50px; font-weight:600; cursor:pointer; }
+        .timer { font-size: 2.5em; font-weight: bold; color: #ffeb3b; }
+        .profile { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin: 10px 0; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Zoom Speed Dating</h1>
-        <p class="tagline">Meet new people • 5-minute dates • Real connections</p>
+        <p>Live Demo Session • 5-Minute Dates</p>
 
         <div class="card">
-            <h2>Admin Login</h2>
-            <p><strong>admin@zoomspeeddating.com</strong><br>
-               Password: <strong>AdminZoom2026!</strong></p>
+            <h2>Demo Event: Evening Mixers</h2>
+            <p>10 Men • 10 Women • Round <span id="round">1</span>/10</p>
         </div>
 
-        <div id="main">
-            <input type="email" id="email" placeholder="Enter your email" value="demo@zoomspeeddating.com"><br>
-            <button onclick="register()">Join - $20</button>
-            <button onclick="login()">Login</button>
+        <div id="currentDate" class="card">
+            <h3>Your Current Date</h3>
+            <div class="profile">
+                <div style="width:80px;height:80px;background:url('https://i.pravatar.cc/150?img=44') center/cover;border-radius:50%;"></div>
+                <div>
+                    <strong>Sophia, 29</strong><br>
+                    <small>Marketing Manager • Loves hiking & coffee</small>
+                </div>
+            </div>
         </div>
 
-        <div id="dashboard" style="display:none;">
-            <h2>Welcome Back, <span id="userName">Alex</span></h2>
-            
-            <button onclick="createEvent()">Create New Event</button>
-            <button onclick="joinEvent()">Join Upcoming Event</button>
-            <button onclick="startDates()">Start Speed Dating Rounds</button>
-            <button onclick="submitMatches()">Submit My Matches</button>
-            
-            <div id="status" class="status"></div>
+        <div class="card">
+            <div class="timer" id="timer">05:00</div>
+            <button onclick="startTimer()">Start 5-Min Timer</button>
+            <button onclick="nextRound()">Next Round →</button>
         </div>
+
+        <div class="card">
+            <h3>Would you like to match with Sophia?</h3>
+            <button onclick="like()">❤️ Yes</button>
+            <button onclick="dislike()">👎 No</button>
+        </div>
+
+        <div id="status" class="card" style="display:none;"></div>
     </div>
 
     <script>
-        function login() {
-            const email = document.getElementById("email").value || "Participant";
-            document.getElementById("main").style.display = "none";
-            document.getElementById("dashboard").style.display = "block";
-            document.getElementById("userName").textContent = email.split("@")[0];
-            addStatus("✅ Successfully logged in");
+        let timeLeft = 300;
+        let round = 1;
+
+        function startTimer() {
+            const timerEl = document.getElementById('timer');
+            const interval = setInterval(() => {
+                timeLeft--;
+                const min = Math.floor(timeLeft / 60);
+                const sec = timeLeft % 60;
+                timerEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    timerEl.textContent = "Time's Up!";
+                }
+            }, 1000);
         }
 
-        function register() {
-            alert("✅ Payment successful! $20 charged.\n\nWelcome to Zoom Speed Dating.");
-            login();
+        function nextRound() {
+            round++;
+            document.getElementById('round').textContent = round;
+            timeLeft = 300;
+            document.getElementById('timer').textContent = "05:00";
+            document.getElementById('status').innerHTML = `<p>✅ Round ${round} started with new match!</p>`;
+            document.getElementById('status').style.display = 'block';
         }
 
-        function createEvent() { addStatus("🎉 New event created for 20 participants (10 men / 10 women)"); }
-        function joinEvent() { addStatus("✅ You've joined the next event. 5-minute rounds begin soon."); }
-        function startDates() { addStatus("🕒 Round 1 in progress • Your match is waiting in the Zoom room"); }
-        function submitMatches() { addStatus("❤️ Matches submitted! You'll be notified of any mutual matches."); }
+        function like() {
+            document.getElementById('status').innerHTML = `<p>❤️ You liked Sophia! We'll notify you of mutual matches at the end.</p>`;
+            document.getElementById('status').style.display = 'block';
+        }
 
-        function addStatus(message) {
-            const status = document.getElementById("status");
-            status.innerHTML += `<p>${message}</p>`;
+        function dislike() {
+            document.getElementById('status').innerHTML = `<p>👎 No match. Moving to next round.</p>`;
+            document.getElementById('status').style.display = 'block';
         }
     </script>
 </body>
