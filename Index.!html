@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Speed Dating</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: linear-gradient(to bottom, #ff69b4, #4b0082); color: white; text-align: center; }
+        h1 { font-size: 2.5em; }
+        button { background: white; color: #4b0082; border: none; padding: 15px 30px; margin: 10px; font-size: 1.1em; border-radius: 50px; cursor: pointer; }
+        button:hover { transform: scale(1.05); }
+        .card { background: rgba(255,255,255,0.2); padding: 20px; margin: 20px auto; max-width: 500px; border-radius: 15px; }
+        input { padding: 12px; margin: 10px; width: 80%; border-radius: 8px; border: none; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Zoom Speed Dating</h1>
+    <p>5-minute dates • $20 membership • Real connections</p>
+
+    <div class="card">
+        <h2>Admin Login</h2>
+        <p>Email: <strong>admin@zoomspeeddating.com</strong><br>
+           Password: <strong>AdminZoom2026!</strong></p>
+    </div>
+
+    <div id="main">
+        <input type="text" id="email" placeholder="Your Email" value="user@example.com"><br>
+        <button onclick="register()">Register - Pay $20</button>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <div id="dashboard" style="display:none;">
+        <h2>Welcome, <span id="userName">Participant</span>!</h2>
+        
+        <button onclick="createEvent()">Create New Event (Admin)</button><br>
+        <button onclick="joinEvent()">Join Next Event (10M/10W)</button><br>
+        <button onclick="startDates()">Start Speed Dates</button><br>
+        <button onclick="submitMatches()">Submit Matches</button><br><br>
+        
+        <div id="status" style="background:rgba(255,255,255,0.3);padding:15px;border-radius:10px;margin:20px;"></div>
+    </div>
+
+    <script>
+        let currentUser = "";
+
+        function login() {
+            currentUser = document.getElementById("email").value || "Participant";
+            document.getElementById("main").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+            document.getElementById("userName").textContent = currentUser.split("@")[0];
+            addStatus("Logged in successfully!");
+        }
+
+        function register() {
+            alert("✅ Redirecting to secure $20 payment (Stripe simulated)...\n\nPayment successful! Welcome to Zoom Speed Dating.");
+            login();
+        }
+
+        function createEvent() {
+            addStatus("🎉 Event created! 20 participants (10M/10W). 10 rounds of 5-min dates scheduled.");
+        }
+
+        function joinEvent() {
+            addStatus("✅ Joined event! You will receive Zoom links for each 5-min date.");
+        }
+
+        function startDates() {
+            addStatus("🕒 Round 1 started!<br>Partner: Sarah (Woman)<br>Zoom Link: <a href='https://zoom.us' target='_blank'>Join Zoom Call</a><br>Time left: 5:00");
+            setTimeout(() => addStatus("Round complete! Next rotation in progress..."), 3000);
+        }
+
+        function submitMatches() {
+            addStatus("❤️ Matches submitted!<br>Mutual matches will receive your contact info automatically.");
+        }
+
+        function addStatus(message) {
+            const status = document.getElementById("status");
+            status.innerHTML += `<p>${message}</p>`;
+            status.scrollTop = status.scrollHeight;
+        }
+
+        // Auto login as demo
+        // login();
+    </script>
+
+    <p style="margin-top:50px;font-size:0.9em;">Full backend version available for computer deployment.</p>
+</body>
+</html>
